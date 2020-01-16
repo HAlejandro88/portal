@@ -1,0 +1,6 @@
+{
+  "name": "portalCentro",
+  "short_name": "portalCentro",
+  "start_url": "/",
+  "display": "standalone"
+}
