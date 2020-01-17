@@ -15,16 +15,23 @@ class PortalApp extends PolymerElement {
         :host {
           display: block;
         }
+
       </style>
-      <menu-element></menu-element>
-      <permiso-component></permiso-component> 
+      <template is="dom-if" if="{{!permiso}}">
+        <login-component></login-component>
+      </template>
+      
+
+      <div hidden$="[[!permiso]]">
+        <permiso-component></permiso-component>
+      </div>
     `;
   }
   static get properties() {
     return {
-      prop1: {
-        type: String,
-        value: 'portal-app'
+      permiso: {
+        type: Boolean,
+        value: 'false'
       }
     };
   }

@@ -5,6 +5,8 @@ import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-listbox/paper-listbox.js';
+import '../menu-element/menu-element.js';
+import '../footer-element/footer-element.js';
 
 class PermisoComponent extends PolymerElement {
     static get template() {
@@ -27,6 +29,7 @@ class PermisoComponent extends PolymerElement {
                     
                 }
             </style>
+            <menu-element title="Criterios"></menu-element>
             <div class="conteiner">
                 <h2>Criterios de buqueda</h2>
                 <paper-input label="Numero de permiso de la Cree" value="{{permiso}}"></paper-input>
