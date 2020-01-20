@@ -35,7 +35,7 @@ class PermisoComponent extends PolymerElement {
                 <paper-input label="Numero de permiso de la Cree" value="{{permiso}}"></paper-input>
                 <paper-input label="Razon social" value="{{razonSocial}}"></paper-input>
                 <paper-dropdown-menu label="Clasificación">
-                    <paper-listbox slot="dropdown-content">
+                    <paper-listbox slot="dropdown-content" value="{{clasificacion}}">
                         <paper-item>Grupo de Estaciones especialisados</paper-item>
                         <paper-item>Estaciones de Servicio Individuales</paper-item>
                         <paper-item>Distribuidora A</paper-item>
@@ -61,6 +61,10 @@ class PermisoComponent extends PolymerElement {
             },
             Clasificacion: {
                 type: String
+            },
+            busqueda: {
+                type: Boolean,
+                value: false
             }
         }
     }

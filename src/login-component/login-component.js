@@ -1,7 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-toast/paper-toast.js';
 //import '/@polymer/iron-icons/iron-icons.js';
 /**
  * @customElement
@@ -62,45 +61,37 @@ import '@polymer/paper-toast/paper-toast.js';
          <div class="conteiner">
             <h1>Bienvendido</h1>
             <img src="https://portalcentro.firebaseapp.com/assets/iniciodesesion-02%20(1).png" class="image">
-            <paper-input class="log" label="Usuario" value="{{login.username}}" required auto-validate error-message="necesita poner tu usuario">
+            <paper-input class="log" label="Usuario" value="{{username}}" required auto-validate error-message="necesita poner tu usuario">
             </paper-input>
-            <paper-input class="log" label="Contraseña" type="password" value="{{login.password}}" required auto-validate error-message="necesita poner tu contraseña">
+            <paper-input class="log" label="Contraseña" type="password" value="{{password}}" required auto-validate error-message="necesita poner tu contraseña">
             </paper-input>
             <br>
-            <paper-button raised class="login" on-tap="entrar">entrar</paper-button>
-            <paper-toast id="toast" text="Bienvenido {{login.username}}"></paper-toast>
-            <paper-toast id="toast1" text="Usuario y/o contraseña incorrecto"></paper-toast>
+            <paper-button raised class="login" on-tap="entrar">Entrar</paper-button>
          </div>
          `;
      }
 
      static get properties() {
          return {
-             login: {
-                 type: Object,
-                 value() {
-                     return {
-                         username: '',
-                         password: '',
-                         img: '/iniciodesesion.png'
-                     }
-                 }
+             username:{
+                 type: String,
+                 value: ''
+             },
+             password: {
+                 type: String,
+                 value: ''
              }
          }
      }
 
      entrar() {
-         if(this.login.username === 'alejandro' && this.login.password === '1234') {
-             this.$.toast.open();
-         }
-         else {
-             this.$.toast1.open();
-         }
-
          this.dispatchEvent(new CustomEvent("login-user",{
              bubbles:false,
              composed:false,
-             detail: this.login
+             detail: {
+                 username: this.username,
+                 password: this.password
+             }
          }))
      }
  }

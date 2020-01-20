@@ -3,6 +3,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
+import '@polymer/paper-menu-button/paper-menu-button-animations.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/app-layout/app-header/app-header.js'
@@ -15,7 +16,7 @@ class MenuElement extends PolymerElement {
         return html `
         <style>
         app-header {
-            background-color: blue;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 100%);
             --app-header-background-rear-layer: {
               /* The header is blue when condensed */
               background-color: blue;
@@ -27,7 +28,7 @@ class MenuElement extends PolymerElement {
               };
           }
         </style>
-        <app-header  effects="parallax-background">
+        <app-header effects="parallax-background">
             <app-toolbar>
                 <paper-menu-button>
                 <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
@@ -50,6 +51,16 @@ class MenuElement extends PolymerElement {
         return {
             title: {
                 type:String
+            },
+            menu: {
+                type: Object,
+                value() {
+                    return {
+                        "duration":500,
+                        "easing":
+                        "cubic-bezier(0.4, 0, 0.2, 1)","fill":"both"
+                    }
+                }
             }
         }
     }
