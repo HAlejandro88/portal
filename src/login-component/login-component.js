@@ -59,7 +59,7 @@ import '@polymer/paper-button/paper-button.js';
             }
          </style>
          <div class="conteiner">
-            <h1>Bienvendido</h1>
+            <h1>Bienvenido</h1>
             <img src="https://portalcentro.firebaseapp.com/assets/iniciodesesion-02%20(1).png" class="image">
             <paper-input class="log" label="Usuario" value="{{username}}" required auto-validate error-message="necesita poner tu usuario">
             </paper-input>

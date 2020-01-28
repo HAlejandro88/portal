@@ -53,7 +53,7 @@ class PortalApp extends PolymerElement {
     console.log(event);
     let logeado = event.detail;
     console.log(logeado);
-    if (logeado.username === 'Alejandro' && logeado.password === '1234') {
+    if (logeado.username === 'usuario1' && logeado.password === '12345678') {
       this.set('permiso',true);
     }
     else {

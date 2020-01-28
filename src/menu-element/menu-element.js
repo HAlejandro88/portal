@@ -10,6 +10,9 @@ import '@polymer/app-layout/app-header/app-header.js'
 import '@polymer/app-layout/app-layout.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
+import '../euro-component/eruro-componet';
+import '../permiso-component/permiso-component';
+import '../pesos-componet/pesos-component.js';
 
 class MenuElement extends PolymerElement {
     static get template() {
@@ -33,12 +36,25 @@ class MenuElement extends PolymerElement {
                 <paper-menu-button>
                 <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
                 <paper-listbox slot="dropdown-content">
-                    <paper-item>Inicio</paper-item>
-                    <paper-item>Servicios</paper-item>
-                    <paper-item>Programas</paper-item>
+                    <paper-item>
+                        Inicio 
+                    </paper-item>
+                    <paper-item>
+                        Dolar 
+                    </paper-item>
+                    <paper-item>
+                        Euro 
+                    </paper-item>
+                    <paper-item>
+                        Pesos 
+                    </paper-item>
+                    <paper-item>
+                        Precios
+                    </paper-item>
                 </paper-listbox>
                 </paper-menu-button>
                 <div main-title spacer>{{title}}</div>
+                <div slot="end">{{date}}</div>
             </app-toolbar>
       </app-header>
 
