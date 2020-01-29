@@ -8,6 +8,8 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '../menu-element/menu-element.js';
 import '../footer-element/footer-element.js';
+import '../login-component/login-component.js';
+
 
 class PermisoComponent extends PolymerElement {
     static get template() {
@@ -62,29 +64,46 @@ class PermisoComponent extends PolymerElement {
                     background-color: #f1f8e9;
                     color: #4caf50;
                   }
+                #login {
+                    display: none;
+                }
+
+                #pesos {
+                    display: block;
+                }
             </style>
-            <menu-element title="Dolar"></menu-element>
-            <div class="conteiner">
-                <h2>Cambio Dolar</h2>
-                <paper-input label="Litros de Carga" value="{{litrosCarga}}"></paper-input>
-                <paper-input label="Compañía" value="{{compania}}"></paper-input>
-                <paper-input label="RFC" value="{{rfc}}"></paper-input>
-                <paper-input label="Nombre Piloto" value="{{nombrePiloto}}"></paper-input>
-                <paper-input label="Numero de Carga" value="{{Ncarga}}"></paper-input>
-                <br>
-                <button class="btn" on-tap="calcular">Calcular</button>
-                <paper-dialog id="precio" class="colored">
-                    <h3>Total</h3>
-                    <label>Nombre del Piloto: {{nombrePiloto}}</label>
-                    <p>
-                        <label>Razon Social</label>
-                        <label>{{rfc}}</label>
-                        <label>Compañia:{{compania}}</label>
-                        <label>Numero de Carga:{{Ncarga}}</label>
-                    </p>
-                    <label>total: {{total}}</label>
-                </paper-dialog>
-            </div>
+                <menu-element title="Dolar" on-login-enter=""></menu-element>
+                <div class="conteiner">
+                    <h2>Cambio Dolar</h2>
+                    <paper-input label="Litros de Carga" value="{{litrosCarga}}"></paper-input>
+                    <paper-input label="precioAsa" value="{{precioAsa}}"></paper-input>
+                    <paper-input label="DUGAEAM" value="{{DUGAEAM}}"></paper-input>
+                    <br>
+                    <button class="btn" on-tap="calcular">Calcular</button>
+                    <paper-dialog id="precio" class="colored">
+                        <h3>Total</h3>
+                        <label>Total: {{total}}</label>
+                    </paper-dialog>
+                    <paper-button on-tap="mostrar">Historial</paper-button>
+                    <paper-dialog id="historial">
+                        <table>
+                            <tr>
+                                <th>Id</th>
+                                <th>Fecha</th>
+                                <th>Litros</th>
+                                <th>Total</th>
+                            </tr>
+                            <tr>
+                                <th>{{id}}</th>
+                                <th>29-enero-2020</th>
+                                <th>{{litrosCarga}}</th>
+                                <th>{{total}}</th>
+                            </tr>
+                        </table>
+                    </paper-dialog>
+                </div>
+                      
+           
         `;
     }
 
@@ -100,42 +119,54 @@ class PermisoComponent extends PolymerElement {
             },
             Dolar: {
                 type: Number,
-                value: 18.25
+                value: 17.80
             },
-            compania:{
-                type: String,
-                value: ''
+            DUGAEAM:{
+                type: Number,
+                value: 0
             },
-            rfc: {
-                type: String,
-                value: ''
+            precioAsa: {
+                type: Number,
+                value: 12.80
             },
-            nombrePiloto: {
-                type: String,
-                value: ''
-            },
-            Ncarga: {
-                type: String,
-                value: ''
+            id: {
+                type: Number,
+                value: 0
             }
         }
     }
 
     calcular() {
-        let hidro = 0.99;
-        let turbocina  = 12.50;
-        let subtotalLMv = hidro + turbocina;
-        let subTotalCMx = subtotalLMv * this.litrosCarga;
-        let subTotalUsdC = subTotalCMx / this.Dolar;
-        const servicios = 11;
-        let subTotal = subTotalUsdC + servicios;
-        const IVA = subTotal * 0.16;
-        let total = subTotal + IVA;
-        total.toFixed(2);
-        console.log(total)
-        this.set('total', total);
-        console.log(this.total);
+        let ph = this.precioAsa + 1;
+        if (this.litrosCarga < 1500) {
+           let combustible = (ph * this.litrosCarga) + 200;
+           let iva = combustible * 0.16;
+           let total = (iva + combustible) + this.DUGAEAM;
+           let tota = parseFloat(total);
+           let sinD = tota.toFixed(2);
+           this.total = sinD;
+           this.id++;
+        }
+        else{
+           let combustible = ph * this.litrosCarga;
+           let iva = combustible * 0.16;
+           let total = (iva + combustible) + this.DUGAEAM;
+           this.total = total;
+           this.id++;
+        }
+
         this.$.precio.open();
+    }
+
+    muestraLogin() {
+        const login = this.shadowRoot.querySelector('#login');
+        signi.style.display = "block";
+        const hiden = this.shadowRoot.querySelector('#pesos');
+        hiden.style.display = "none";
+    }
+
+    mostrar() {
+       this.$.historial.open(); 
     }
 }
 

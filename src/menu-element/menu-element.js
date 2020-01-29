@@ -30,26 +30,34 @@ class MenuElement extends PolymerElement {
                 box-shadow: inset 0px 5px 2px -3px rgba(0, 0, 0, 0.2);
               };
           }
+
+          #login {
+              display: none;
+          }
+
+          #dolar {
+            display: none;
+          }
         </style>
         <app-header effects="parallax-background">
             <app-toolbar>
                 <paper-menu-button>
                 <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
                 <paper-listbox slot="dropdown-content">
-                    <paper-item>
+                    <paper-item on-tap="login">
                         Inicio 
                     </paper-item>
-                    <paper-item>
+                    <paper-item on-tap="dolar">
                         Dolar 
                     </paper-item>
-                    <paper-item>
+                    <paper-item on-tap="euro">
                         Euro 
                     </paper-item>
-                    <paper-item>
+                    <paper-item on-tap="pesos">
                         Pesos 
                     </paper-item>
-                    <paper-item>
-                        Precios
+                    <paper-item on-tap="historial">
+                        Historial
                     </paper-item>
                 </paper-listbox>
                 </paper-menu-button>
@@ -57,9 +65,7 @@ class MenuElement extends PolymerElement {
                 <div slot="end">{{date}}</div>
             </app-toolbar>
       </app-header>
-
-        
-        
+      
         `;
     }
 
@@ -79,6 +85,34 @@ class MenuElement extends PolymerElement {
                 }
             }
         }
+    }
+
+    login() {
+        this.dispatchEvent(new CustomEvent("login-enter",{
+            bubbles:false,
+            composed:false,
+        }))
+    }
+
+    dolar() {
+        this.dispatchEvent(new CustomEvent("dolar-enter",{
+            bubbles:false,
+            composed:false,
+        }))
+    }
+
+    euro() {
+        this.dispatchEvent(new CustomEvent("euro-enter",{
+            bubbles:false,
+            composed:false,
+        }))
+    }
+
+    historial() {
+        this.dispatchEvent(new CustomEvent("historial-enter",{
+            bubbles:false,
+            composed:false,
+        }))
     }
 }
 

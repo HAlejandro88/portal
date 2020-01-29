@@ -53,9 +53,10 @@ class PortalApp extends PolymerElement {
     console.log(event);
     let logeado = event.detail;
     console.log(logeado);
-    if (logeado.username === 'usuario1' && logeado.password === '12345678') {
+    if (logeado.username === 'uriel' && logeado.password === 'prueba') {
       this.set('permiso',true);
     }
+    
     else {
       this.$.toast.text = 'usuario y/o contraseña invalida';
       this.$.toast.open();
