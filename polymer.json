@@ -1,8 +1,18 @@
 {
-  "npm": true,
-  "lint": {
-    "rules": [
-      "polymer-3"
-    ]
-  }
+  "entrypoint": "index.html",
+  "shell": "src/portal-app/portal-app.js",
+  "sources": [
+    "src/portal-app/portal-app.js",
+    "manifest/**",
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/bundles/**"
+  ],
+  "builds": [
+    { "preset": "es5-bundled" },
+    { "preset": "es6-unbundled" },
+    { "preset": "uncompiled-unbundled" }
+  ]
 }
