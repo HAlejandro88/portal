@@ -23,7 +23,7 @@ class PermisoComponent extends PolymerElement {
                     left: 50%;
                     top: 50%;
                     transform: translate(-50%,-50%);
-                    background-color: rgba(97,187,247,0.8);
+                    background-color: rgba(97,187,247,0.2);
                     webkit-box-shadow: 7px 2px 94px 25px rgba(0,0,0,0.67);
                     -moz-box-shadow: 7px 2px 94px 25px rgba(0,0,0,0.67);
                     box-shadow: 7px 2px 94px 25px rgba(0,0,0,0.67);
@@ -37,13 +37,13 @@ class PermisoComponent extends PolymerElement {
                     left: 250px;
                     text-decoration: none;
                     padding: 10px;
-                    font-weight: 600;
+                    font-weight: 600px;
                     font-size: 20px;
                     color: #ffffff;
                     background-color: rgba(97,187,247,0.8);
                     border-radius: 6px;
                     border: 2px solid #0016b0;
-                    width: 80%;
+                    width: 20%;
                     margin-left: 30px;
                   }
                   .btn:hover{
@@ -53,10 +53,10 @@ class PermisoComponent extends PolymerElement {
                   }
 
                 paper-input {
-                    --primary-text-color: white;
-                    --paper-input-container-color: white;
-                    --paper-input-container-focus-color: white;
-                    --paper-input-container-invalid-color: black;
+                    --primary-text-color: #000;
+                    --paper-input-container-color: #000;
+                    --paper-input-container-focus-color: #000;
+                    --paper-input-container-invalid-color: red;
                 }
                 paper-dialog.colored {
                     border: 2px solid;
@@ -71,39 +71,53 @@ class PermisoComponent extends PolymerElement {
                 #pesos {
                     display: block;
                 }
+
+                table {  color: #333; font-family: Helvetica, Arial, sans-serif; width: 640px; border-collapse: collapse;}
+                td, th { border: 1px solid transparent; height: 30px; }
+                th { background: #D3D3D3; font-weight: bold; }
+                td { background: #FAFAFA; text-align: center; }
+                tr:nth-child(even) td { background: #F1F1F1; }  
+                tr:nth-child(odd) td { background: #FEFEFE; } 
+                tr td:hover { background: #666; color: #FFF; }
             </style>
-                <menu-element title="Dolar" on-login-enter=""></menu-element>
                 <div class="conteiner">
                     <h2>Cambio Dolar</h2>
                     <paper-input label="Litros de Carga" value="{{litrosCarga}}"></paper-input>
                     <paper-input label="precioAsa" value="{{precioAsa}}"></paper-input>
-                    <paper-input label="DUGAEAM" value="{{DUGAEAM}}"></paper-input>
+                    <paper-dropdown-menu label="DUGAEAM" value="{{DUGAEAM}}">
+                        <paper-listbox slot="dropdown-content" selected="0">
+                            <paper-item>126.63</paper-item>
+                            <paper-item>180.92</paper-item>
+                            <paper-item>271.37</paper-item>
+                            <paper-item>5029.6</paper-item>
+                            <paper-item>14591.23</paper-item>
+                            <paper-item>21867.83</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    
                     <br>
-                    <button class="btn" on-tap="calcular">Calcular</button>
+                    <button class="btn" on-tap="calcularDolar"> Dolar</button>
+                    <button class="btn" on-tap="calcularEuro"> Euro</button>
+                    <button class="btn" on-tap="calcularPesos"> Pesos</button>
                     <paper-dialog id="precio" class="colored">
                         <h3>Total</h3>
                         <label>Total: {{total}}</label>
                     </paper-dialog>
-                    <paper-button on-tap="mostrar">Historial</paper-button>
-                    <paper-dialog id="historial">
-                        <table>
-                            <tr>
-                                <th>Id</th>
-                                <th>Fecha</th>
-                                <th>Litros</th>
-                                <th>Total</th>
-                            </tr>
-                            <tr>
-                                <th>{{id}}</th>
-                                <th>29-enero-2020</th>
-                                <th>{{litrosCarga}}</th>
-                                <th>{{total}}</th>
-                            </tr>
-                        </table>
-                    </paper-dialog>
+                    <br>
+                    <br>
+                    <table style="width:100%;">
+                        <tr>
+                            <th>Id</th>
+                            <th>Precio ASA</th>
+                            <th>Tipo Cambio</th>
+                            <th>Litros</th>
+                            <th>DUGAEAM</th>
+                            <th>Total</th>
+                        </tr>
+                        <tbody id="data">
+                        </tbody>
+                    </table>
                 </div>
-                      
-           
         `;
     }
 
@@ -119,7 +133,7 @@ class PermisoComponent extends PolymerElement {
             },
             Dolar: {
                 type: Number,
-                value: 17.80
+                value: 17.62
             },
             DUGAEAM:{
                 type: Number,
@@ -127,48 +141,114 @@ class PermisoComponent extends PolymerElement {
             },
             precioAsa: {
                 type: Number,
-                value: 12.80
+                value: 11.45
             },
             id: {
                 type: Number,
                 value: 0
+            },
+            euro: {
+                type: Number,
+                value: 20.52    
+            },
+            peso: {
+                type:Number,
+                value: 1
             }
         }
     }
 
-    calcular() {
-        let ph = this.precioAsa + 1;
-        if (this.litrosCarga < 1500) {
-           let combustible = (ph * this.litrosCarga) + 200;
-           let iva = combustible * 0.16;
-           let total = (iva + combustible) + this.DUGAEAM;
-           let tota = parseFloat(total);
-           let sinD = tota.toFixed(2);
-           this.total = sinD;
-           this.id++;
+    calcularDolar() {
+        let precioHidromex = parseFloat(this.precioAsa) + 1;
+        let preciotc = precioHidromex / this.Dolar;
+        let dugaeamtc = this.DUGAEAM / this.Dolar;
+        if (this.litrosCarga <= 1499) {
+            let comision = 200;
+            let comisionTC = comision / this.Dolar;
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva +comisionTC + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML +=`<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.Dolar} dolares</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
         }
         else{
-           let combustible = ph * this.litrosCarga;
-           let iva = combustible * 0.16;
-           let total = (iva + combustible) + this.DUGAEAM;
-           this.total = total;
-           this.id++;
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva  + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML += `<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.Dolar} dolares</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
         }
 
         this.$.precio.open();
     }
 
-    muestraLogin() {
-        const login = this.shadowRoot.querySelector('#login');
-        signi.style.display = "block";
-        const hiden = this.shadowRoot.querySelector('#pesos');
-        hiden.style.display = "none";
+    calcularEuro() {
+        let precioHidromex = parseFloat(this.precioAsa) + 1;
+        let preciotc = precioHidromex / this.euro;
+        let dugaeamtc = this.DUGAEAM / this.euro;
+        if (this.litrosCarga <= 1499) {
+            let comision = 200;
+            let comisionTC = comision / this.euro;
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva +comisionTC + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML += `<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.euro} euros</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
+        }
+        else {
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva  + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML += `<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.euro} euros</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
+        }
+
+        this.$.precio.open();
     }
 
-    mostrar() {
-       this.$.historial.open(); 
+    calcularPesos() {
+        let precioHidromex = parseFloat(this.precioAsa) + 1;
+        let preciotc = precioHidromex / this.peso;
+        let dugaeamtc = this.DUGAEAM / this.peso;
+        if (this.litrosCarga <= 1499) {
+            let comision = 200;
+            let comisionTC = comision / this.peso;
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva +comisionTC + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML += `<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.peso} pesos</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
+        }
+        else{
+            let combustible = this.litrosCarga * preciotc;
+            let iva = combustible * 0.16;
+            let subtotal = combustible + iva  + dugaeamtc;
+            let total = parseFloat(subtotal);
+            this.total = total.toFixed(2);
+            this.id++;
+            this.shadowRoot.querySelector("#data").innerHTML += `<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.peso} pesos</td><td>${this.litrosCarga}</td><td>${this.DUGAEAM}</td><td>${this.total}</td>`;
+        }
+
+        this.$.precio.open();
     }
+
+    
+    mostrar() {
+        //document.getElementById("wraped").insertRow(-1).innerHTML=`<td>${this.id}</td><td>${this.precioAsa}</td><td>${this.litrosCarga}</td><td>${this.total}</td>`;
+        this.$.historial.open();
+  }
 }
+
 
 
 window.customElements.define('permiso-component',PermisoComponent);
